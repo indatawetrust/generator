@@ -8,12 +8,44 @@ var path = require('path');
 <% Object.keys(modules).sort().forEach(function (variable) { -%>
 var <%- variable %> = require('<%- modules[variable] %>');
 <% }); -%>
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 
 <% Object.keys(localModules).sort().forEach(function (variable) { -%>
 var <%- variable %> = require('<%- localModules[variable] %>');
 <% }); -%>
 
 var app = express();
+
+// Configure passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Configure passport-local to use account model for authentication
+const {user} = require('./models/index');
+
+passport.use(new LocalStrategy(user.authenticate()));
+passport.serializeUser(user.serializeUser());
+passport.deserializeUser(user.deserializeUser());
+
+var JwtStrategy = require('passport-jwt').Strategy,
+    ExtractJwt = require('passport-jwt').ExtractJwt;
+var opts = {}
+opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.secretOrKey = 'your_jwt_secret';
+passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
+  user.findOne({_id: jwt_payload}, function(err, user) {
+    if (err) {
+        return done(err, false);
+    }
+    if (user) {
+        return done(null, user);
+    } else {
+        return done(null, false);
+        // or you could create a new account
+    }
+  });
+}));
 
 <% if (view) { -%>
 // view engine setup

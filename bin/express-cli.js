@@ -168,6 +168,11 @@ function createApplication (name, dir) {
   app.locals.uses.push("logger('dev')")
   pkg.dependencies.morgan = '~1.9.0'
 
+  // cors
+  app.locals.modules.cors = 'cors'
+  app.locals.uses.push("cors()")
+  pkg.dependencies.cors = '2.8.5'
+
   // Body parsers
   app.locals.uses.push('express.json()')
   app.locals.uses.push('express.urlencoded({ extended: false })')
@@ -184,9 +189,24 @@ function createApplication (name, dir) {
 
   // dotenv
   pkg.dependencies.dotenv = '6.2.0'
-  
+
   // passport
   pkg.dependencies.passport = '0.4.0'
+
+  // passport local
+  pkg.dependencies['passport-local'] = '1.0.0'
+
+  // passport jwt
+  pkg.dependencies['passport-jwt'] = '4.0.0'
+
+  // passport local mongoose
+  pkg.dependencies['passport-local-mongoose'] = '5.0.1'
+
+  // jsonwebtoken
+  pkg.dependencies.jsonwebtoken = '8.4.0'
+
+  // mongoose
+  pkg.dependencies.mongoose = '5.4.6'
 
   if (dir !== '.') {
     mkdir(dir, '.')
@@ -196,6 +216,9 @@ function createApplication (name, dir) {
   mkdir(dir, 'public/javascripts')
   mkdir(dir, 'public/images')
   mkdir(dir, 'public/stylesheets')
+
+  // .env
+  copyTemplate('.env', path.join(dir, '.env'))
 
   // copy css templates
   switch (program.css) {
@@ -219,6 +242,10 @@ function createApplication (name, dir) {
   // copy route templates
   mkdir(dir, 'routes')
   copyTemplateMulti('js/routes', dir + '/routes', '*.js')
+
+  // copy model templates
+  mkdir(dir, 'models')
+  copyTemplateMulti('js/models', dir + '/models', '*.js')
 
   if (program.view) {
     // Copy view templates
@@ -286,6 +313,10 @@ function createApplication (name, dir) {
   // User router mount
   app.locals.localModules.usersRouter = './routes/users'
   app.locals.mounts.push({ path: '/users', code: 'usersRouter' })
+
+  // Auth router mount
+  app.locals.localModules.authRouter = './routes/auth'
+  app.locals.mounts.push({ path: '/auth', code: 'authRouter' })
 
   // Template support
   switch (program.view) {
