@@ -61,6 +61,7 @@
   "scripts": {
     "lint": "eslint .",
     "test": "mocha --reporter spec --bail --check-leaks test/",
-    "test-ci": "mocha --reporter spec --check-leaks test/"
+    "test-ci": "mocha --reporter spec --check-leaks test/",
+    "run": "rm -rf demo && npm un -g . && npm i -g . && mkdir demo && cd demo && express"
   }
 }

@@ -177,6 +177,11 @@ function createApplication (name, dir) {
   app.locals.uses.push('cookieParser()')
   pkg.dependencies['cookie-parser'] = '~1.4.3'
 
+  // helmet
+  app.locals.modules.helmet = 'helmet'
+  app.locals.uses.push('helmet()')
+  pkg.dependencies.helmet = '3.15.0'
+
   if (dir !== '.') {
     mkdir(dir, '.')
   }
@@ -318,8 +323,6 @@ function createApplication (name, dir) {
       app.locals.view = false
       break
   }
-
-  pkg.dependencies.helmet = '3.15.0'
 
   // Static files
   app.locals.uses.push("express.static(path.join(__dirname, 'public'))")
