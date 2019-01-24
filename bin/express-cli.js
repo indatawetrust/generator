@@ -182,6 +182,12 @@ function createApplication (name, dir) {
   app.locals.uses.push('helmet()')
   pkg.dependencies.helmet = '3.15.0'
 
+  // dotenv
+  pkg.dependencies.dotenv = '6.2.0'
+  
+  // passport
+  pkg.dependencies.passport = '0.4.0'
+
   if (dir !== '.') {
     mkdir(dir, '.')
   }
