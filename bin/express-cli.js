@@ -319,6 +319,8 @@ function createApplication (name, dir) {
       break
   }
 
+  pkg.dependencies.helmet = '3.15.0'
+
   // Static files
   app.locals.uses.push("express.static(path.join(__dirname, 'public'))")
 
