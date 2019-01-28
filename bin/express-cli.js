@@ -177,6 +177,10 @@ function createApplication (name, dir) {
   app.locals.uses.push('express.json()')
   app.locals.uses.push('express.urlencoded({ extended: false })')
 
+  // csurf
+  app.locals.modules.csurf = 'csurf'
+  pkg.dependencies.csurf = '1.9.0'
+
   // Cookie parser
   app.locals.modules.cookieParser = 'cookie-parser'
   app.locals.uses.push('cookieParser()')
@@ -184,8 +188,17 @@ function createApplication (name, dir) {
 
   // helmet
   app.locals.modules.helmet = 'helmet'
-  app.locals.uses.push('helmet()')
+  app.locals.uses.push("helmet()")
   pkg.dependencies.helmet = '3.15.0'
+
+  app.locals.modules.timeout = 'connect-timeout'
+  app.locals.uses.push('timeout("5s")')
+  pkg.dependencies['connect-timeout'] = '1.9.0'
+
+  // compression
+  app.locals.modules.compression = 'compression'
+  app.locals.uses.push('compression()')
+  pkg.dependencies.compression = '1.7.3'
 
   // dotenv
   pkg.dependencies.dotenv = '6.2.0'
